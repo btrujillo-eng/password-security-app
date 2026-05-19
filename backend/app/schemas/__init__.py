@@ -1,16 +1,16 @@
-from schemas.user import IdModel, EmailStr, UserData, UserResponse
+from schemas.user import UserBase, UserCreate, UserLoggin, UserResponse
 from schemas.password import( 
-    SecurityStatus, PasswordAnalyzed, PasswordResponse, 
-    PasswordData, PasswordVulnerabilities
+    SecurityStatus, PasswordAnalyzed, PasswordAnalysisCreate, 
+    PasswordBase, PasswordVulnerabilities
 )
 __all__ = [
-    "IdModel",
-    "EmailStr",
-    "UserData",
+    "UserBase", 
+    "UserCreate", 
+    "UserLoggin",
     "UserResponse",
     "SecurityStatus",
     "PasswordAnalyzed",
-    "PasswordData",
-    "PasswordResponse",
+    "PasswordBase",
+    "PasswordAnalysisCreate",
     "PasswordVulnerabilities"
 ]

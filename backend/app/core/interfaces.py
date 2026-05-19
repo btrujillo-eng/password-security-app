@@ -1,9 +1,20 @@
-from schemas import PasswordData, PasswordAnalyzed, PasswordVulnerabilities, PasswordResponse
-from schemas import UserResponse, UserData, IdModel
+from schemas import PasswordBase, PasswordAnalyzed, PasswordVulnerabilities, PasswordAnalysisCreate
+from schemas import UserResponse, UserCreate
+from backend.app.models import User
 
 from abc import ABC, abstractmethod
+from sqlalchemy.orm import Session
+from pydantic import EmailStr
 from typing import List
 
+
+class IPasswordHasher(ABC):
+    
+    @abstractmethod
+    def hash(self, password: str) -> str: ...
+    
+    @abstractmethod
+    def verify_password(self, plain_password: str, hasched_password: str) -> bool: ...
 
 class IPasswordAnalyzer(ABC):
     """
@@ -17,7 +28,7 @@ class IPasswordAnalyzer(ABC):
             Analyzes a provided password and returns raw data (Booleans True-False)  which contain information about the password's security.
     """
     @abstractmethod
-    async def analyze(self, password: PasswordData) -> PasswordAnalyzed: ...
+    async def analyze(self, password: PasswordBase) -> PasswordAnalyzed: ...
     
 class IVulnerabilityDetector(ABC):
     """
@@ -36,24 +47,21 @@ class IVulnerabilityDetector(ABC):
 class IPasswordSecurityService(ABC):
     
     @abstractmethod
-    async def password_analyze(self, password: str) -> PasswordResponse: ...
+    async def password_analyze(self, password: str) -> PasswordAnalysisCreate: ...
 
-class IUserRepository(ABC):
+class ISqlRepository(ABC):
     
     @abstractmethod
-    def get_all(self) -> List[UserResponse]: ...
+    def get_user_by_email(self, db: Session, email: EmailStr) -> User | None: ...
     
     @abstractmethod
-    def get_user_by_id(self, id: IdModel) -> UserResponse:...
+    def get_user(self, db: Session, username: str) -> User | None:...
     
     @abstractmethod
-    def create(self, user_data: UserData) -> UserResponse:...
+    def create_user(self, db: Session, user_data: UserCreate) -> UserResponse:...
     
     @abstractmethod
-    def create_many(self, users: List[UserData]) -> bool: ...
+    def update_user(self, db: Session, username: str, user_data: UserCreate) -> UserResponse: ...
     
     @abstractmethod
-    def update(self, id: IdModel, user_data: UserData) -> UserResponse: ...
-    
-    @abstractmethod
-    def delete(self, id: IdModel) -> bool: ...
+    def delete_user(self, db: Session, username: str) -> bool: ...

@@ -1,10 +1,10 @@
-from schemas import PasswordData, PasswordAnalyzed
+from schemas import PasswordBase, PasswordAnalyzed
 from core import(
     IPasswordAnalyzer, get_lowercase_letter, get_capital_letter, get_ascending_sequence,
     get_descending_sequence, get_special_character, get_minimum_length, get_numbers
 )
 class PasswordAnalyzer(IPasswordAnalyzer):
-    async def analyze(self, password: PasswordData) -> PasswordAnalyzed:
+    async def analyze(self, password: PasswordBase) -> PasswordAnalyzed:
         """
         Analyzes a provided password and returns raw data (Booleans True-False) about the password's security.
         """

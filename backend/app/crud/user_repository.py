@@ -1,5 +1,5 @@
-from schemas import IdModel, UserData, UserResponse
-from core import IUserRepository, get_user_by_email
+from schemas import IdModel, UserBase, UserResponse
+from core import ISqlRepository, get_user_by_email
 from exceptions import EmailAlreadyExistsError, UserDoesNotExistsError
 
 from typing import List
@@ -8,7 +8,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class SqliteUserRepository(IUserRepository):
+class SqliteUserRepository(ISqlRepository):
     
     def get_all(self) -> List[UserResponse]:
         with sql.connect("uniminuto.db") as connection:
@@ -33,11 +33,11 @@ class SqliteUserRepository(IUserRepository):
             
             return UserResponse(
                 id=row[0], 
-                name=row[1],
+                username=row[1],
                 email=row[2]
             )
                     
-    def create(self, user_data: UserData) -> UserResponse:
+    def create(self, user_data: UserBase) -> UserResponse:
         with sql.connect("uniminuto.db") as connection:
             cursor = connection.cursor()
             
@@ -50,25 +50,25 @@ class SqliteUserRepository(IUserRepository):
                 RETURNING id, name, email
             """
             try:
-                cursor.execute(query, (user_data.name, user_data.email))
+                cursor.execute(query, (user_data.user_name, user_data.email))
                 new_row = cursor.fetchone()
                 connection.commit()
                 
                 return UserResponse(
                     id=new_row[0],
-                    name=new_row[1],
+                    username=new_row[1],
                     email=new_row[2]
                 )
             except sql.Error as e:
                 logger.critical(f"DB error: {e}")
                 raise
             
-    def create_many(self, users: List[UserData]) -> bool:
+    def create_many(self, users: List[UserBase]) -> bool:
         with sql.connect("uniminuto.db") as connection:
             cursor = connection.cursor()
             
             query = "INSERT INTO students(name, email) VALUES (?, ?)"
-            data = [(u.name, u.email) for u in users if not get_user_by_email(u.email)]
+            data = [(u.user_name, u.email) for u in users if not get_user_by_email(u.email)]
             
             try:
                 cursor.executemany(query, data)
@@ -77,7 +77,7 @@ class SqliteUserRepository(IUserRepository):
                 logger.critical(f"DB error: {e}")
                 raise  
             
-    def update(self, id: IdModel, user_data: UserData) -> UserResponse:
+    def update(self, id: IdModel, user_data: UserBase) -> UserResponse:
         with sql.connect("uniminuto.db") as connection:
             cursor = connection.cursor()
             
@@ -90,13 +90,13 @@ class SqliteUserRepository(IUserRepository):
                 RETURNING id, name, email
             """
             try:
-                cursor.execute(query, (user_data.name, user_data.email, id.id))
+                cursor.execute(query, (user_data.user_name, user_data.email, id.id))
                 modified_row = cursor.fetchone()
                 connection.commit()
                 
                 return UserResponse(
                     id=modified_row[0],
-                    name=modified_row[1],
+                    username=modified_row[1],
                     email=modified_row[2]
                 )
             except sql.Error as e:

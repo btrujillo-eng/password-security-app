@@ -1,8 +1,8 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from enum import Enum
 
 class SecurityStatus(str, Enum):
-    SAFE = "seg3ura"
+    SAFE = "segura"
     SOMEWHAT_SAFE = "poco segura"
     UNSAFE = "insegura"
     VERY_INSECURE = "muy insegura"
@@ -17,7 +17,7 @@ class PasswordVulnerabilities(str, Enum):
     HAS_NUMBERS = "La contraseña no tiene al menos 3 números"
     WITHOUT_VULNERABILITIES = "Sin vulnerabilidades"
     
-class PasswordData(BaseModel):
+class PasswordBase(BaseModel):
     password: str = Field(
         description="Password that will be subject to security analysis",
         min_length=3,
@@ -33,9 +33,11 @@ class PasswordAnalyzed(BaseModel):
     special_character: bool = Field(description="Stores the boolean value that indicates whether the password contains at leat two speacial characters")
     numbers: bool = Field(description="Stores the boolean value that indicates whether the password contains at least three numbers")
     
-class PasswordResponse(BaseModel):
-    password: str = Field(description="Password that was analyzed")
-    status: str = Field(description="Security status that was assigned to the password after for being analyzed")
-    color: str = Field(description="Color that represents the security status of the analyzed password")
-    vulnerabilities: list[str] = Field(description="List of vulnerabilities found in the analyzed password")
-    tips: list[str] = Field(description="")
+class PasswordAnalysisCreate(PasswordBase):
+    security_score: int = Field(description="Security score of the ")
+    security_status: str = Field(description="Security status that was assigned to the password after for being analyzed")
+    safety_color: str = Field(description="Color that represents the security status of the analyzed password")
+    vulnerabilities: list[str] = Field(description="List of vulnerabilities found in the analyzed password", default=[])
+    feedback: list[str] = Field(description="", default=[])
+    
+    model_config = ConfigDict(from)

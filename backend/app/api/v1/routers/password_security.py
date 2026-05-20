@@ -14,4 +14,4 @@ async def analyze_password_security(
     default_security_status: SecurityStatus = Depends(get_default_security_status)
     ):
     
-    return await password_security_service.password_analyze(password, default_vulnerabilty_value, default_security_status)
+    return password_security_service.password_analyze(password, default_vulnerabilty_value, default_security_status)

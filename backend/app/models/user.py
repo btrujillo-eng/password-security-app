@@ -16,7 +16,7 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now())
     modified_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now(), onupdate=func.now())
     
-    password_analysis= relationship("PasswordSecurityAnalysis", back_populates="user")
+    #password_analysis= relationship("PasswordSecurityAnalysis", back_populates="user")
     
     __table_args__ = (
         Index("users_pkey", "id"),

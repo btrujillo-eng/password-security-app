@@ -1,4 +1,5 @@
 from backend.app.schemas.user import UserBase, UserCreate, UserLoggin, UserResponse
+from backend.app.schemas.token import Token, TokenData
 from backend.app.schemas.password import( 
     SecurityStatus, PasswordAnalyzed, PasswordAnalysisCreate, 
     PasswordBase, PasswordVulnerabilities
@@ -12,5 +13,7 @@ __all__ = [
     "PasswordAnalyzed",
     "PasswordBase",
     "PasswordAnalysisCreate",
-    "PasswordVulnerabilities"
+    "PasswordVulnerabilities",
+    "Token",
+    "TokenData"
 ]

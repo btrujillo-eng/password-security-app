@@ -1,6 +1,6 @@
 from backend.app.exceptions import EmailAlreadyExistsError, UserDoesNotExistsError
 from backend.app.schemas import UserCreate, PasswordAnalysisCreate
-from backend.app.models import User, PasswordSecurityAnalysis
+from backend.app.models import User
 from backend.app.core import IPasswordHasher, ISqlRepository
 
 from sqlalchemy.orm import Session
@@ -59,31 +59,35 @@ class PostgreSqlRepository(ISqlRepository):
         
         return user_db
     
+    # def add_password_analysis(self, db: Session, user_name: str, analysis_data: PasswordAnalysisCreate) -> bool:
+    #     user_db = self.get_user(db, user_name)
+    #     if not user_db:
+    #         raise UserDoesNotExistsError(f"The user {user_name} does not exist.")
+        
+    #     analysis_details = {
+    #         "vulnerabilities": analysis_data.vulnerabilities,
+    #         "feedback": analysis_data.feedback
+    #     }
+        
+    #     new_analysis_db = PasswordSecurityAnalysis(
+    #         # Falta implementar la contraseñ con hash para imitar el historial
+    #         user_id=user_db.id,
+    #         security_status=analysis_data.security_status,
+    #         details=analysis_details
+    #     )
+    #     try:
+    #         db.add(new_analysis_db)
+    #         db.commit()
+    #         return True
+    #     except Exception as e:
+    #         logger.critical(
+    #         "[PostgreSQLRepository]: Database error inserting password analysis for user_id: %s. Error: %s",
+    #         user_db.id, 
+    #         str(e),
+    #         exc_info=True
+    #         )
+    #         raise
+    
     def add_password_analysis(self, db: Session, user_name: str, analysis_data: PasswordAnalysisCreate) -> bool:
-        user_db = self.get_user(db, user_name)
-        if not user_db:
-            raise UserDoesNotExistsError(f"The user {user_name} does not exist.")
-        
-        analysis_details = {
-            "vulnerabilities": analysis_data.vulnerabilities,
-            "feedback": analysis_data.feedback
-        }
-        
-        new_analysis_db = PasswordSecurityAnalysis(
-            # Falta implementar la contraseñ con hash para imitar el historial
-            user_id=user_db.id,
-            security_status=analysis_data.security_status,
-            details=analysis_details
-        )
-        try:
-            db.add(new_analysis_db)
-            db.commit()
-            return True
-        except Exception as e:
-            logger.critical(
-            "[PostgreSQLRepository]: Database error inserting password analysis for user_id: %s. Error: %s",
-            user_db.id, 
-            str(e),
-            exc_info=True
-            )
-            raise
+    
+        return True

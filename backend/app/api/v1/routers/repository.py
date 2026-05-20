@@ -1,8 +1,7 @@
-from backend.app.api.dependencies import get_user_repository, get_password_hasher, get_session_db
-from backend.app.exceptions import EmailAlreadyExistsError, UserDoesNotExistsError
+from backend.app.api.dependencies import get_user_repository, get_session_db
 from backend.app.crud import PostgreSqlRepository
-from backend.app.models import User, Base
-from backend.app.schemas import UserCreate
+from backend.app.models import Base
+from backend.app.schemas import UserCreate, UserResponse
 from backend.app.database import engine
 
 from fastapi import APIRouter, HTTPException, Depends, status
@@ -11,14 +10,14 @@ from pydantic import EmailStr
 
 Base.metadata.create_all(bind=engine)
 
-router = APIRouter(prefix="api/v1/user", tags=["user Repository"])
+router = APIRouter(prefix="/api/v1/user", tags=["user Repository"])
 
-@router.get("/", response_model=User)
+@router.get("/", response_model=UserResponse)
 async def get_user(
     username: str, 
     db: Session = Depends(get_session_db), 
     repository: PostgreSqlRepository = Depends(get_user_repository)
-    ) -> User:
+    ):
     user = repository.get_user(db, username)
     if not user:
         raise HTTPException(
@@ -27,12 +26,12 @@ async def get_user(
         )
     return user
 
-@router.get("/email", response_model=User)
+@router.get("/email", response_model=UserResponse)
 async def get_user_by_email(
     email: EmailStr, 
     db: Session = Depends(get_session_db), 
     repository: PostgreSqlRepository = Depends(get_user_repository)
-    ) -> User:
+    ):
     user = repository.get_user_by_email(db, email)
     if not user:
         raise HTTPException(
@@ -46,7 +45,7 @@ async def create_user(
     user_data: UserCreate,
     db: Session = Depends(get_session_db), 
     repository: PostgreSqlRepository = Depends(get_user_repository)
-    ) -> str:
+    ):
     new_user = repository.create_user(db, user_data)
     if not new_user:
         raise HTTPException(

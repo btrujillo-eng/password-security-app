@@ -1,5 +1,6 @@
 from backend.app.core.interfaces import IPasswordHasher, IPasswordAnalyzer, IPasswordSecurityService, IVulnerabilityDetector, ISqlRepository
 from backend.app.core.constans import SAFETY_RULES, SAFETY_TIPS, COLOR_SECURITY_STATUS, VULNERABILITY_SCORES
+from backend.app.core.jwt_handler import create_access_token, verify_token
 from backend.app.core.analyzer_utils import(
     get_ascending_sequence, get_capital_letter, get_descending_sequence, get_numbers,
     get_lowercase_letter, get_special_character, get_minimum_length
@@ -32,5 +33,7 @@ __all__ = [
     "get_color_security_status",
     "get_vulnerabilities",
     "ISqlRepository",
-    "PasswordHasher"
+    "PasswordHasher",
+    "create_access_token",
+    "verify_token"
 ]

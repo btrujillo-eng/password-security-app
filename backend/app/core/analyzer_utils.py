@@ -1,36 +1,36 @@
-from schemas import PasswordBase
+from backend.app.schemas import PasswordBase
 
 import re
 
-async def get_capital_letter(password: PasswordBase) -> bool:
+def get_capital_letter(password: PasswordBase) -> bool:
     """
     Returns True if the password contains at least one capital letter.
     Otherwise, returns False.
     """
     return bool(re.search(r"[A-Z]", password.password))
 
-async def get_lowercase_letter(password: PasswordBase) -> bool:
+def get_lowercase_letter(password: PasswordBase) -> bool:
     """
     Returns True if the password contains at least one lowercase letter.
     Otherwise, returns False.
     """
     return bool(re.search(r"[a-z]", password.password))
 
-async def get_special_character(password: PasswordBase) -> bool:
+def get_special_character(password: PasswordBase) -> bool:
     """
     Return True if the password contains at least one special character.
     Otherwise, returns False.
     """
     return bool(re.search(r"[^\w\s]", password.password))
 
-async def get_minimum_length(password: PasswordBase, length: int = 8) -> bool:
+def get_minimum_length(password: PasswordBase, length: int = 8) -> bool:
     """
     Returns True if the password has a minimum secure length.
     Otherwise, returns False.
     """
     return length <= len(password.password)
 
-async def get_descending_sequence(password: PasswordBase) -> bool:
+def get_descending_sequence(password: PasswordBase) -> bool:
     """
     Returns True if the password contains a descending sequence of least three characters.
     Otherwise, returns False.
@@ -45,7 +45,7 @@ async def get_descending_sequence(password: PasswordBase) -> bool:
         
     return False
 
-async def get_ascending_sequence(password: PasswordBase) -> bool:
+def get_ascending_sequence(password: PasswordBase) -> bool:
     """
     Returns True if the password contains an ascending sequence of at least three characters.
     Otherwise, returns False.
@@ -60,7 +60,7 @@ async def get_ascending_sequence(password: PasswordBase) -> bool:
             
     return False
 
-async def get_numbers(password: PasswordBase, minimum_quantity: int = 3) -> bool:
+def get_numbers(password: PasswordBase, minimum_quantity: int = 3) -> bool:
     """
     Return True if the password contains at least three numbers.
     Otherwise, return False.

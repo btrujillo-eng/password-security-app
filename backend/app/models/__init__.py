@@ -1,7 +1,9 @@
-from backend.app.models.password import PasswordAnalyzed
+from backend.app.models.password import PasswordSecurityAnalysis
 from backend.app.models.user import User
+from backend.app.models.base import Base
 
 __all__ = [
-    "PasswordAnalyzed",
-    "User"
+    "PasswordSecurityAnalysis",
+    "User",
+    "Base"
 ]

@@ -6,7 +6,7 @@ import os
 
 _ = load_dotenv()
 
-db_url = os.getenv("DATABASE_SQLITE_URL")
+db_url = os.getenv("POSTGRESQL_DATABASE_URL")
 if not db_url:
     raise RuntimeError("The database URL could not be found")
 

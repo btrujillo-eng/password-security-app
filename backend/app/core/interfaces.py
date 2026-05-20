@@ -1,5 +1,5 @@
-from schemas import PasswordBase, PasswordAnalyzed, PasswordVulnerabilities, PasswordAnalysisCreate
-from schemas import UserResponse, UserCreate
+from backend.app.schemas import PasswordBase, PasswordAnalyzed, PasswordVulnerabilities, PasswordAnalysisCreate
+from backend.app.schemas import UserResponse, UserCreate
 from backend.app.models import User
 
 from abc import ABC, abstractmethod
@@ -28,7 +28,7 @@ class IPasswordAnalyzer(ABC):
             Analyzes a provided password and returns raw data (Booleans True-False)  which contain information about the password's security.
     """
     @abstractmethod
-    async def analyze(self, password: PasswordBase) -> PasswordAnalyzed: ...
+    def analyze(self, password: PasswordBase) -> PasswordAnalyzed: ...
     
 class IVulnerabilityDetector(ABC):
     """
@@ -42,12 +42,12 @@ class IVulnerabilityDetector(ABC):
             It detects password security vulnerabilities based on raw data (true-false booleans) which contain information about the analyzed password.
     """
     @abstractmethod
-    async def detect(self, raw_data: PasswordAnalyzed, default_vulnerabilty_value: PasswordVulnerabilities) -> List[PasswordVulnerabilities]:...
+    def detect(self, raw_data: PasswordAnalyzed, default_vulnerabilty_value: PasswordVulnerabilities) -> List[PasswordVulnerabilities]:...
 
 class IPasswordSecurityService(ABC):
     
     @abstractmethod
-    async def password_analyze(self, password: str) -> PasswordAnalysisCreate: ...
+    def password_analyze(self, password: str) -> PasswordAnalysisCreate: ...
 
 class ISqlRepository(ABC):
     
@@ -64,4 +64,4 @@ class ISqlRepository(ABC):
     def update_user(self, db: Session, username: str, user_data: UserCreate) -> UserResponse: ...
     
     @abstractmethod
-    def delete_user(self, db: Session, username: str) -> bool: ...
+    def add_password_analysis(self, db: Session, user_name: str, analysis_data: PasswordAnalysisCreate) -> bool: ...

@@ -1,5 +1,5 @@
-from schemas.user import UserBase, UserCreate, UserLoggin, UserResponse
-from schemas.password import( 
+from backend.app.schemas.user import UserBase, UserCreate, UserLoggin, UserResponse
+from backend.app.schemas.password import( 
     SecurityStatus, PasswordAnalyzed, PasswordAnalysisCreate, 
     PasswordBase, PasswordVulnerabilities
 )

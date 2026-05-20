@@ -34,10 +34,9 @@ class PasswordAnalyzed(BaseModel):
     numbers: bool = Field(description="Stores the boolean value that indicates whether the password contains at least three numbers")
     
 class PasswordAnalysisCreate(PasswordBase):
-    security_score: int = Field(description="Security score of the ")
     security_status: str = Field(description="Security status that was assigned to the password after for being analyzed")
     safety_color: str = Field(description="Color that represents the security status of the analyzed password")
     vulnerabilities: list[str] = Field(description="List of vulnerabilities found in the analyzed password", default=[])
     feedback: list[str] = Field(description="", default=[])
     
-    model_config = ConfigDict(from)
+    model_config = ConfigDict(from_attributes=True, str_strip_whitespace=True)

@@ -1,6 +1,6 @@
-from api.dependencies import get_password_security_service, get_default_vulnerabilty_value, get_default_security_status
-from schemas import PasswordBase, PasswordAnalysisCreate, PasswordVulnerabilities, SecurityStatus
-from services import PasswordSecurityService
+from backend.app.api.dependencies import get_password_security_service, get_default_vulnerabilty_value, get_default_security_status
+from backend.app.schemas import PasswordBase, PasswordAnalysisCreate, PasswordVulnerabilities, SecurityStatus
+from backend.app.services import PasswordSecurityService
 
 from fastapi import APIRouter, Depends
 

@@ -1,4 +1,4 @@
-from schemas import SecurityStatus, PasswordVulnerabilities
+from backend.app.schemas import SecurityStatus, PasswordVulnerabilities
 
 from typing import List, Tuple, Dict
 
@@ -43,7 +43,7 @@ SAFETY_TIPS: Dict[PasswordVulnerabilities, str]= {
 
 COLOR_SECURITY_STATUS: Dict[SecurityStatus, str] = {
     SecurityStatus.SAFE: "green",
-    SecurityStatus.SOMEWHAT_SAFE: "yelow",
+    SecurityStatus.SOMEWHAT_SAFE: "yellow",
     SecurityStatus.UNSAFE: "orange",
     SecurityStatus.VERY_INSECURE: "red"
 }

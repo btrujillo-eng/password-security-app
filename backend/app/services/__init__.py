@@ -1,11 +1,9 @@
 from backend.app.services.detector import VulnerabilityDetector
 from backend.app.services.analyzer import PasswordAnalyzer
-from services.password_security import PasswordSecurityService
-from crud.user_repository import SqliteUserRepository
+from backend.app.services.password_security import PasswordSecurityService
 
 __all__ = [
     "VulnerabilityDetector",
     "PasswordAnalyzer",
-    "PasswordSecurityService",
-    "SqliteUserRepository"
+    "PasswordSecurityService"
 ]

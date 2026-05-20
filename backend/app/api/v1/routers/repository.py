@@ -1,67 +1,57 @@
-from exceptions import EmailAlreadyExistsError, UserDoesNotExistsError
-from schemas import UserResponse, UserBase, IdModel
-from api.dependencies import get_user_repository
-from core import ISqlRepository
+from backend.app.api.dependencies import get_user_repository, get_password_hasher, get_session_db
+from backend.app.exceptions import EmailAlreadyExistsError, UserDoesNotExistsError
+from backend.app.crud import PostgreSqlRepository
+from backend.app.models import User, Base
+from backend.app.schemas import UserCreate
+from backend.app.database import engine
 
 from fastapi import APIRouter, HTTPException, Depends, status
-from typing import List
+from sqlalchemy.orm import Session
+from pydantic import EmailStr
 
-router = APIRouter(prefix="/users", tags=["users"])
+Base.metadata.create_all(bind=engine)
 
-@router.get("/", response_model=List[UserResponse])
-async def get_all(repository: ISqlRepository = Depends(get_user_repository)) -> List[UserResponse]:
-    return repository.get_all()
+router = APIRouter(prefix="api/v1/user", tags=["user Repository"])
 
-@router.get("/get/id", response_model=UserResponse)
-async def get_user_by_id(id: IdModel, repository: ISqlRepository = Depends(get_user_repository)) -> UserResponse:
-    try:
-        return repository.get_user_by_id(id)
-    except UserDoesNotExistsError as e:
+@router.get("/", response_model=User)
+async def get_user(
+    username: str, 
+    db: Session = Depends(get_session_db), 
+    repository: PostgreSqlRepository = Depends(get_user_repository)
+    ) -> User:
+    user = repository.get_user(db, username)
+    if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=str(e)
+            detail=f"El usuario {username} no existe"
         )
-        
-@router.post("/create", response_model=UserResponse)
-async def create(data: UserBase, repository: ISqlRepository = Depends(get_user_repository)) -> UserResponse:         
-        try:
-            return repository.create(data)
-        except EmailAlreadyExistsError as e:
-            raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail=str(e)
-            )
+    return user
 
-@router.post("/create-many")
-async def create_many(users: List[UserBase], repository: ISqlRepository = Depends(get_user_repository)):
-    try:
-        sucess =  repository.create_many(users)
-        if sucess:
-            return "Users successfully created"
-    except EmailAlreadyExistsError as e:
-            raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail=str(e)
-            )
-           
-@router.put("/update", response_model=UserResponse)
-async def update(id: IdModel, data: UserBase, repository: ISqlRepository = Depends(get_user_repository)) -> UserResponse:
-    try:
-        return repository.update(id, data)
-    except UserDoesNotExistsError as e:
+@router.get("/email", response_model=User)
+async def get_user_by_email(
+    email: EmailStr, 
+    db: Session = Depends(get_session_db), 
+    repository: PostgreSqlRepository = Depends(get_user_repository)
+    ) -> User:
+    user = repository.get_user_by_email(db, email)
+    if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=str(e)
+            detail=f"El usuario con email {email} no existe"
         )
+    return user
 
-@router.delete("/delete")        
-async def delete(id: IdModel, repsotiory: ISqlRepository = Depends(get_user_repository)):
-    try:
-        row_del = repsotiory.delete(id)
-        if row_del:
-            return "Successfully removed"
-    except UserDoesNotExistsError as e:
+@router.post("/create")
+async def create_user(
+    user_data: UserCreate,
+    db: Session = Depends(get_session_db), 
+    repository: PostgreSqlRepository = Depends(get_user_repository)
+    ) -> str:
+    new_user = repository.create_user(db, user_data)
+    if not new_user:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=str(e)
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error inesperado al registrar el usuario {user_data.user_name}"
         )
+    return f"✅ {user_data.user_name} te has registrado correctamente"
+

@@ -8,10 +8,10 @@ class UserBase(BaseModel):
     model_config = ConfigDict(from_attributes=True, str_strip_whitespace=True)
     
 class UserCreate(UserBase):
-    password_hash: str = Field(min_length=8, max_length=128)
+    password: str = Field(min_length=8, max_length=128)
     
 class UserLoggin(BaseModel):
-    email_or_username: str = Field(min_length=8, max_length=128)
+    email_or_username: str = Field(min_length=8, max_length=255)
     password_hash: str = Field(min_length=8, max_length=128)
     
     model_config = ConfigDict(from_attributes=True, str_strip_whitespace=True)

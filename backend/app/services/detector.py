@@ -1,11 +1,11 @@
-from core import IVulnerabilityDetector, SAFETY_RULES
-from schemas import PasswordVulnerabilities, PasswordAnalyzed
+from backend.app.core import IVulnerabilityDetector, SAFETY_RULES
+from backend.app.schemas import PasswordVulnerabilities, PasswordAnalyzed
 
 from typing import List
 
 class VulnerabilityDetector(IVulnerabilityDetector):
         
-    async def detect(self, raw_data: PasswordAnalyzed, default_vulnerabilty_value: PasswordVulnerabilities) -> List[PasswordVulnerabilities]:
+    def detect(self, raw_data: PasswordAnalyzed, default_vulnerabilty_value: PasswordVulnerabilities) -> List[PasswordVulnerabilities]:
         detected_vulnerabilities = []
         
         for attribute_name, triggier_value, vulnerability in SAFETY_RULES:

@@ -1,3 +1,28 @@
-__pycache__
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Environment variables
 .env
-.venv
+
+# Node
+fronted/vite-project/node_modules/
+fronted/vite-project/dist/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Alembic
+alembic/versions/*.pyc

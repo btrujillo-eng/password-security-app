@@ -14,12 +14,46 @@ class PostgreSqlRepository(ISqlRepository):
         self.password_hasher = password_hasher
     
     def get_user_by_email(self, db: Session, email: EmailStr) -> User | None:
+        """Retrieves a user from the database by their email address.
+
+        Args:
+            db: Active SQLAlchemy database session.
+            email: The email address to search for.
+
+        Returns:
+            The User instance if found, or None if no user
+            exists with the provided email.
+        """
         return db.query(User).filter(User.email == email).first()
     
     def get_user(self, db: Session, username: str) -> User | None:
+        """Retrieves a user from the database by their username.
+
+        Args:
+            db (Session): Active SQLAlchemy database session.
+            username (str): The username to search for.
+
+        Returns:
+            The User instance if found, or None if no user
+            exists with the provided username.
+        """
         return db.query(User).filter(User.username == username).first()
 
     def create_user(self, db: Session, user_data: UserCreate) -> bool:
+        """Creates a new user in the database with a hashed password.
+
+        Args:
+            db (Session): Active SQLAlchemy database session.
+            user_data (UserCreate): Pydantic schema containing the new user's
+                   username, email, and plain text password
+
+        Raises:
+            EmailAlreadyExistsError: If the provided email is already
+                                 registered in the database.
+
+        Returns:
+            True if the user was created and committed successfully.
+        """
         password_hashed = self.password_hasher.hash(user_data.password)
         
         email_exist = self.get_user_by_email(db, user_data.email)
@@ -46,6 +80,20 @@ class PostgreSqlRepository(ISqlRepository):
             raise
     
     def update_user(self, db: Session, username: str, user_data: UserCreate) -> User:
+        """Updates an existing user's data in the database.
+
+        Args:
+            db (Session): Active SQLAlchemy database session.
+            username (str): The username of the user to update.
+            user_data (UserCreate): Pydantic schema containing the updated
+                   user fields to apply.
+
+        Raises:
+            UserDoesNotExistsError: If no user is found with the provided username.
+
+        Returns:
+            The updated User instance refreshed from the database.
+        """
         user_db = self.get_user(db, user_data.user_name)
         if not user_db:
             logger.warning(f"The user {username} does not exist.")
@@ -70,7 +118,7 @@ class PostgreSqlRepository(ISqlRepository):
     #     }
         
     #     new_analysis_db = PasswordSecurityAnalysis(
-    #         # Falta implementar la contraseñ con hash para imitar el historial
+    #         # Falta implementar la contraseña con hash para implementar el historial.
     #         user_id=user_db.id,
     #         security_status=analysis_data.security_status,
     #         details=analysis_details

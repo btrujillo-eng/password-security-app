@@ -12,8 +12,8 @@
         placeholder="Ingresa tu contraseña"
         @keyup.enter="analyze"
       />
-      <button @click="showPassword = !showPassword">
-        {{ showPassword ? 'Ocultar' : 'Mostrar' }}
+      <button @click="showPassword = !showPassword" :disabled="loading || !password">
+        {{ showPassword ? 'Ocultar cintraseña' : 'Mostrar contraseña' }}
       </button>
     </div>
 
@@ -52,7 +52,7 @@ async function analyze() {
   try {
     result.value = await analyzePassword(password.value)
   } catch (e) {
-    error.value = 'Error al conectar con el servidor. Verifica que el backend esté corriendo.'
+    error.value = 'Disculpa, estamos teniendo problemas para conectarnos al servidor.'
   } finally {
     loading.value = false
   }

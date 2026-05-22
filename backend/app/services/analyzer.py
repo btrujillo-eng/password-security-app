@@ -5,8 +5,14 @@ from backend.app.core import(
 )
 class PasswordAnalyzer(IPasswordAnalyzer):
     def analyze(self, password: PasswordBase) -> PasswordAnalyzed:
-        """
-        Analyzes a provided password and returns raw data (Booleans True-False) about the password's security.
+        """Analyzes the security of a provided password.
+
+        Args:
+            password (PasswordBase): Password that will be subject to security analysis
+
+        Returns:
+            PasswordAnalyzed: Raw data (Booleans True-False) which contain information about
+                the password.
         """
         return PasswordAnalyzed(
             minimum_length=get_minimum_length(password),

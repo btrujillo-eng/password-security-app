@@ -11,6 +11,14 @@ class PasswordSecurityService(IPasswordSecurityService):
         self.vulnerability_detector = vulnerability_detector
         
     def password_analyze(self, password: PasswordBase, default_vulnerabilty_value: PasswordVulnerabilities, default_security_status: SecurityStatus) -> PasswordAnalysisCreate:
+        """It analyzes the security status of the provided password.
+
+        Args:
+            password (str): Passoword to analyze.
+
+        Returns:
+            PasswordAnalysisCreate: Summary about the status security of the porvided password.
+        """
         raw_data = self.password_analyzer.analyze(password)
         detected_vulnerabilities = self.vulnerability_detector.detect(raw_data, default_vulnerabilty_value)
         security_status = get_security_status(detected_vulnerabilities, default_security_status)

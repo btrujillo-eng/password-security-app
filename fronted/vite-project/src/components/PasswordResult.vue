@@ -2,11 +2,11 @@
   <div v-if="result" class="result-card" :style="{ borderColor: result.safety_color }">
     
     <h2 :style="{ color: result.safety_color }">
-      Contraseña: {{ result.security_status }}
+      Estado de seguridad: {{ result.security_status }}
     </h2>
 
     <div v-if="result.vulnerabilities.length > 0">
-      <h3>Vulnerabilidades detectadas</h3>
+      <h3>Vulnerabilidades detectadas:</h3>
       <ul>
         <li v-for="(vuln, index) in result.vulnerabilities" :key="index">
           {{ vuln }}
@@ -15,10 +15,10 @@
     </div>
 
     <div v-if="result.feedback.length > 0">
-      <h3>Sugerencias</h3>
+      <h3>Sugerencias para mejorar la seguridad de tu contraseña:</h3>
       <ul>
-        <li v-for="(tip, index) in result.feedback" :key="index">
-          {{ tip }}
+        <li v-for="(feed, index) in result.feedback" :key="index">
+          {{ feed }}
         </li>
       </ul>
     </div>

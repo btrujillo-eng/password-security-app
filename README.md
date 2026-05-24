@@ -58,7 +58,7 @@ Interactive docs at `http://127.0.0.1:8000/docs`
 1. Navigate to the frontend directory:
 
 ```bash
-cd fronted/vite-project
+cd fronted/vue-project
 ```
 
 2. Install dependencies:

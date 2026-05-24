@@ -1,6 +1,6 @@
 # password-security-app
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Python 3.12+
@@ -77,7 +77,7 @@ The app will be available at `http://localhost:5173`
 
 ---
 
-### ⚠️ Important
+### Important
 
 Both servers must be running simultaneously for the app to work.
 Open two terminals — one for the backend and one for the frontend.

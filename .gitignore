@@ -13,8 +13,9 @@ build/
 .env
 
 # Node
-fronted/vite-project/node_modules/
-fronted/vite-project/dist/
+node_modules/
+dist/
+.vite/
 
 # IDEs
 .vscode/
